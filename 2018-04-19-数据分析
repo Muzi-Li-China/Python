@@ -1,0 +1,18 @@
+import pandas as pd
+import numpy as np    #导入模块
+df = pd.read_csv('DataAnalyst.csv',encoding = 'gb2312')   #打开文件
+df_distinct = df.drop_duplicates(subset = 'positionId',keep = 'first')
+
+#subset参数选择以哪个列去重
+#keep参数选择保留的方式，first保留第一个，last保留最后一个
+
+def cut_word(word):
+    position = word.find('-')
+    bottomSalary = word[:position-1]
+    return bottomSalary
+
+
+
+
+subset参数选择以哪个列去重
+keep参数选择保留的方式，first保留第一个，last保留最后一个
