@@ -1,15 +1,35 @@
-'''
-学习递归函数
-'''
-def sum_list(lis):
-    a = 0             #设置一个种子
-    for i in lis:     #从列表中循环出每个元素
-        if type(i) is int:  #判断元素是否是整数
-            a += i          #真：进行相加
+def parse_list(lis):
+    new_list = []
+    def parse(lis):
+        for i in lis:
+            if type(i) is int:
+                new_list.append(i)
+            else:
+                parse(i)
+    parse(lis)
+    return new_list
+
+L = [1,[2,3,4],[5],6,7,[8,[9]]]  #列表嵌套转换成单列表
+parse_list(L)
+
+def print_list(lis):
+    for i in lis:
+        if type(i) is int:
+            print(i,end = " ")
         else:
-            a += sun_list(i)  #假：重复函数
+            print_list(i)
+
+L = [1,[2,3,4],[5],6,7,[8,[9]]]  #列表嵌套里面的每个元素打印
+print_list(L)
+
+def sum_list(lis):
+    a = 0
+    for i in lis:
+        if type(i) is int:
+            a += i
+        else:
+            a += sum_list(i)
     return a
 
-
-L = [1,[2,3,4],[5],6,7,[8,[9]]]
+L = [1,[2,3,4],[5],6,7,[8,[9]]]  #列表嵌套里面所有元素求和
 sum_list(L)
