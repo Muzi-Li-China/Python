@@ -1,0 +1,15 @@
+'''
+学习递归函数
+'''
+def sum_list(lis):
+    a = 0             #设置一个种子
+    for i in lis:     #从列表中循环出每个元素
+        if type(i) is int:  #判断元素是否是整数
+            a += i          #真：进行相加
+        else:
+            a += sun_list(i)  #假：重复函数
+    return a
+
+
+L = [1,[2,3,4],[5],6,7,[8,[9]]]
+sum_list(L)
