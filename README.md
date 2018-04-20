@@ -1,2 +1,3 @@
 # Python
-everyday notes
+自学Python,每天做一天笔记
+提醒自己，善待每一个写好的代码，无论简单、复杂。
