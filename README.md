@@ -1,2 +1,2 @@
 # Python
-自学Python
+everyday notes
