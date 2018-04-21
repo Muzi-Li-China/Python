@@ -2,7 +2,7 @@ import urllib.request
 import re
 import pandas as pd
 url = 'https://www.zhipin.com/c101250100/h_101250100/?query=%E6%95%B0%E6%8D%AE&page=1&ka=page-1'
-def request(url,n):
+def request(url):
     data = urllib.request.urlopen(urllib.request.Request(url)).read()
     data = data.decode('utf-8')
     # # 公司名称
@@ -30,5 +30,9 @@ def request(url,n):
                        'experience':experiencelist,
                        'formal':formallist})
     return df
-print(request(url))
+datalist = []
+for i in range(10):
+    url = 'https://www.zhipin.com/c101250100/h_101250100/?query=%E6%95%B0%E6%8D%AE&page='+str(i)+'&ka=page-1'
+    datalist.append(request(url))
+print()
 
