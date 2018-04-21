@@ -1,38 +1,37 @@
-import urllib.request
-import re
 import pandas as pd
-url = 'https://www.zhipin.com/c101250100/h_101250100/?query=%E6%95%B0%E6%8D%AE&page=1&ka=page-1'
-def request(url):
-    data = urllib.request.urlopen(urllib.request.Request(url)).read()
-    data = data.decode('utf-8')
-    # # 公司名称
-    # corporate_name_re = re.compile('target="_blank">(.+)</a></h3>')
-    # corporate_name_list = corporate_name_re(data)
-    #岗位
-    jobsre = re.compile('<div class="job-title">(.+)</div>')
-    jobslist = jobsre.findall(data)
-    #薪资
-    salaryre = re.compile('<span class="red">(.+)</span>')
-    salarylist = salaryre.findall(data)
-    #细节
-    detailre = re.compile('<p>(.+)  <em class="vline"></em>(.+)<em class="vline"></em>(.+)</p>')
-    detaillist = detailre.findall(data)
-    zonelist = [] #地区
-    experiencelist = [] #经验
-    formallist = [] #学历
-    for i in detaillist:
-        zonelist.append(i[0])
-        experiencelist.append(i[1])
-        formallist.append(i[2])
-    df = pd.DataFrame({'zone':zonelist,
-                       'jobs':jobslist,
-                       'salary':salarylist,
-                       'experience':experiencelist,
-                       'formal':formallist})
+import urllib.request
+from bs4 import BeautifulSoup
+#爬取智联招聘信息
+newsurl = 'http://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E9%95%BF%E6%B2%99&kw=%E6%95%B0%E6%8D%AE&isadv=0&sg=5fc28c0630444389bd5b8682cacc853c&p=1'
+def wangzhua(url):
+#请求
+    req = urllib.request.Request(url)
+    req.add_header('User-Agent', 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)')
+#返回
+    response = urllib.request.urlopen(req)
+    html = response.read()
+    bsObj = BeautifulSoup(html, "html.parser")
+#标题
+    zwmc = [i.text for i in bsObj.select('.zwmc a')]
+    gsmc = [x for x in [i.text for i in bsObj.select('.gsmc a')] if len(x) >0]
+    zwyx = [i.text for i in bsObj.select('.zwyx')][1:]
+    gzdd = [i.text for i in bsObj.select('.gzdd')][1:]
+    newlist_deatil_two = [i.text for i in bsObj.select('.newlist_deatil_two')]
+    xueli = []
+    for i in newlist_deatil_two:
+        if i.find('职位月薪')-i.find('学历')+3 >0:
+            xueli.append(i[i.find('学历')+3:i.find('职位月薪')])
+        else:
+            xueli.append("不限")
+    df = pd.DataFrame({'职位名称':zwmc,
+                       '公司名称':gsmc,
+                       '工作地点':gzdd,
+                       '学历要求':xueli,
+                       '职位月薪':zwyx})
     return df
-datalist = []
+df = []
 for i in range(10):
-    url = 'https://www.zhipin.com/c101250100/h_101250100/?query=%E6%95%B0%E6%8D%AE&page='+str(i)+'&ka=page-1'
-    datalist.append(request(url))
-print()
+    newsurl = 'http://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E9%95%BF%E6%B2%99&kw=%E6%95%B0%E6%8D%AE&isadv=0&sg=5fc28c0630444389bd5b8682cacc853c&p='+str(i)
+    df.append(wangzhua(newsurl))
+pd.concat(df).to_excel('2018-04-21.xlsx',index=False)
 
