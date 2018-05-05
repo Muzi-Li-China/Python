@@ -3,16 +3,18 @@ class MyFrame(wx.Frame):
     def __init__(self):
         wx.Frame.__init__(self,None,-1,'花名册',size=(520,450))
         panel = wx.Panel(self)
+        #静态标签
         labeAll = wx.StaticText(panel,
                                 -1,
                                 '记录',
                                 pos=(220,5),
                                 )
+        #文本框
         self.textAll = wx.TextCtrl(panel,
                                    -1,
                                    size = (480,200),
                                    pos = (10,25),
-                                   style=wx.TE_MULTILINE | wx.TE_READONLY)
+                                   style=wx.TE_MULTILINE | wx.TE_READONLY) #文本框的属性
         labelName = wx.StaticText(panel,
                                   -1,
                                   '姓名',
@@ -43,9 +45,10 @@ class MyFrame(wx.Frame):
                                    size = (300,25),
                                    pos = (40,290),
                                    )
-        self.btnPut = wx.Button(panel,-1,'提交',size=(75,25),pos = (220,350))
-        self.Bind(wx.EVT_BUTTON,self.OnButtonPut,self.btnPut)
-
+        self.btnPut = wx.Button(panel,-1,'提交',size=(75,25),pos = (220,350)) #添加按钮
+        self.Bind(wx.EVT_BUTTON,self.OnButtonPut,self.btnPut) #响应事件
+        
+    #事件函数
     def OnButtonPut(self,event):
         name = self.textName.GetValue()
         self.textName.Clear()
@@ -55,7 +58,6 @@ class MyFrame(wx.Frame):
         self.textAge.Clear()
         user = 'name：%s, sex：%s, age：%s\n'%(name,sex,age)
         self.textAll.AppendText(user)
-
 
 app = wx.App()
 frame = MyFrame()
